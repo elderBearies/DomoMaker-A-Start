@@ -56,6 +56,17 @@ const getDomos = (request, response) => {
   });
 };
 
+const clearDomos = (request) => {
+  const req = request;
+
+  Domo.DomoModel.deleteMany({ owner: req.session.account._id }, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
 module.exports.make = makeDomo;
+module.exports.clearDomos = clearDomos;

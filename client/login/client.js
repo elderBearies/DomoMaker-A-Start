@@ -20,7 +20,7 @@ const handleSignup = (e) => {
   
   $('#domoMessage').animate({width:'hide'}, 350);
   
-  if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
+  if ($('#user').val() == '' || $('#name').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
     handleError('All fields are required!');
     return false;
   }
@@ -64,6 +64,8 @@ const SignupWindow = (props) => {
     >
     <label htmlFor='username'>Username: </label>
     <input id='user' type='text' name='username' placeholder='username' />
+	<label htmlFor='name'>Name: </label>
+	<input id='name' type='text' name='name' placeholder='your name here' />
     <label htmlFor='pass'>Password: </label>
     <input id='pass' type='password' name='pass' placeholder='password' />
     <label htmlFor='pass2'>Password again: </label>

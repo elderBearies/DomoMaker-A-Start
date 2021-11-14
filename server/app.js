@@ -14,7 +14,7 @@ const redis = require('redis');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURL = 'mongodb+srv://elderBearies:lonknzorda@cluster0.redty.mongodb.net/DomoMaker';
+const dbURL = 'mongodb+srv://elderBearies:lonknzorda@cluster0.redty.mongodb.net/DomoMakerE';
 
 mongoose.connect(dbURL, (err) => {
   if (err) {

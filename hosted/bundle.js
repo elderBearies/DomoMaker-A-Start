@@ -1,5 +1,13 @@
 "use strict";
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var currentUser;
+
 var handleDomo = function handleDomo(e) {
   e.preventDefault();
   $('#domoMessage').animate({
@@ -73,9 +81,11 @@ var DomoList = function DomoList(props) {
       className: "domoAge"
     }, " Age: ", domo.age, " "));
   });
-  return /*#__PURE__*/React.createElement("div", {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h2", {
+    className: "ownerName"
+  }, name, "'s Domos"), /*#__PURE__*/React.createElement("div", {
     className: "domoList"
-  }, domoNodes);
+  }, domoNodes));
 };
 
 var loadDomosFromServer = function loadDomosFromServer() {
@@ -86,13 +96,29 @@ var loadDomosFromServer = function loadDomosFromServer() {
   });
 };
 
+var getAcct = function getAcct() {
+  sendAjax('GET', '/getName', null, function (data) {
+    currentUser = _objectSpread({}, data.account);
+    name = data.account.name;
+  });
+};
+
 var setup = function setup(csrf) {
+  var clearButton = document.querySelector('#clearButton');
   ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
     csrf: csrf
   }), document.querySelector('#makeDomo'));
   ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
     domos: []
   }), document.querySelector('#domos'));
+  clearButton.addEventListener('click', function (e) {
+    e.preventDefault();
+    sendAjax('DELETE', '/clearDomos', {
+      _csrf: csrf
+    });
+    loadDomosFromServer();
+  });
+  getAcct();
   loadDomosFromServer();
 };
 

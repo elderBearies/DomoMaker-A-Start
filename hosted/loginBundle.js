@@ -22,7 +22,7 @@ var handleSignup = function handleSignup(e) {
     width: 'hide'
   }, 350);
 
-  if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
+  if ($('#user').val() == '' || $('#name').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
     handleError('All fields are required!');
     return false;
   }
@@ -84,6 +84,13 @@ var SignupWindow = function SignupWindow(props) {
     type: "text",
     name: "username",
     placeholder: "username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "name"
+  }, "Name: "), /*#__PURE__*/React.createElement("input", {
+    id: "name",
+    type: "text",
+    name: "name",
+    placeholder: "your name here"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {

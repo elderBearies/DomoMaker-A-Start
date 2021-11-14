@@ -42,8 +42,9 @@ const signup = (request, response) => {
   req.body.username = `${req.body.username}`;
   req.body.pass = `${req.body.pass}`;
   req.body.pass2 = `${req.body.pass2}`;
+  req.body.name = `${req.body.name}`;
 
-  if (!req.body.username || !req.body.pass || !req.body.pass2) {
+  if (!req.body.username || !req.body.name || !req.body.pass || !req.body.pass2) {
     return res.status(400).json({ error: 'Please fill out all fields!' });
   }
 
@@ -54,6 +55,7 @@ const signup = (request, response) => {
   return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
     const accountData = {
       username: req.body.username,
+      name: req.body.name,
       salt,
       password: hash,
     };
@@ -90,8 +92,23 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+const getName = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findByUsername(req.session.account.username, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured!' });
+    }
+
+    return res.json({ account: docs });
+  });
+};
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
+module.exports.getName = getName;

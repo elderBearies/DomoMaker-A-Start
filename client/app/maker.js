@@ -1,3 +1,5 @@
+let currentUser;
+
 const handleDomo = (e) => {
   e.preventDefault();
   
@@ -54,9 +56,12 @@ const DomoList = function(props) {
   });
   
   return (
+  <React.Fragment>
+    <h2 className='ownerName'>{name}'s Domos</h2>
     <div className='domoList'>
 	{domoNodes}
 	</div>
+  </React.Fragment>
   );
 };
 
@@ -68,7 +73,15 @@ const loadDomosFromServer = () => {
   });
 };
 
+const getAcct = () => {
+  sendAjax('GET', '/getName', null, (data) => {
+    currentUser = {...data.account};
+	name = data.account.name;
+  });
+};
+
 const setup = function(csrf) {
+  const clearButton = document.querySelector('#clearButton');
   ReactDOM.render(
     <DomoForm csrf={csrf} />, document.querySelector('#makeDomo')
   );
@@ -77,6 +90,13 @@ const setup = function(csrf) {
     <DomoList domos={[]} />, document.querySelector('#domos')
   );
   
+  clearButton.addEventListener('click', (e) => {
+	e.preventDefault();
+	sendAjax('DELETE', '/clearDomos', {_csrf: csrf});
+	loadDomosFromServer();
+  });
+  
+  getAcct();
   loadDomosFromServer();
 };
 
@@ -85,6 +105,8 @@ const getToken = () => {
     setup(result.csrfToken); 
   });
 };
+
+
 
 $(document).ready(function() {
   getToken();
